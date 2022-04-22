@@ -1,14 +1,11 @@
-# Copyright 2017-20 ForgeFlow S.L. (www.forgeflow.com)
+# Copyright 2022 Xtendoo Software SLU (www.xtendoo.es)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import email
 import email.policy
-import logging
 import xmlrpc.client as xmlrpclib
 
 from odoo import api, models
-
-_logger = logging.getLogger(__name__)
 
 
 class MailThread(models.AbstractModel):
@@ -32,18 +29,22 @@ class MailThread(models.AbstractModel):
             message = message.encode("utf-8")
         message = email.message_from_bytes(message, policy=email.policy.SMTP)
         msg_dict = self.message_parse(message, save_original=save_original)
-        _logger.info(
-            "Fetched mail from %s to %s with Message-Id %s",
-            msg_dict.get("from"),
-            msg_dict.get("to"),
-            msg_dict.get("message_id"),
-        )
+        message_id = msg_dict.get("message_id")
+        message_from = msg_dict.get("message_from")
+        message_to = msg_dict.get("message_to")
 
-        return super().message_process(
-            model,
-            message_copy,
-            custom_values=custom_values,
-            save_original=save_original,
-            strip_attachments=strip_attachments,
-            thread_id=thread_id,
-        )
+        print("#"*80)
+        print("message_id", message_id)
+        print("message_from", message_from)
+        print("mesage_to", message_to)
+        print("#"*80)
+
+        if message_id:
+            return super().message_process(
+                model,
+                message_copy,
+                custom_values=custom_values,
+                save_original=save_original,
+                strip_attachments=strip_attachments,
+                thread_id=thread_id,
+            )

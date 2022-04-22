@@ -1,1 +1,1 @@
-from . import test_fetchmail_incoming_log
+from . import test_fetchmail_incoming_policy
